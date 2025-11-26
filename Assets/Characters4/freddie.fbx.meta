@@ -1,0 +1,320 @@
+fileFormatVersion: 2
+guid: a62854cb966e78545b0c38baa3d4def6
+ModelImporter:
+  serializedVersion: 24200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Hair
+    second: {fileID: 2100000, guid: 4b87af075264f924fadf7a37eba540cf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Cloth
+    second: {fileID: 2100000, guid: cde55e5813afc874d9212d216575c710, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Hair
+    second: {fileID: 2100000, guid: a42f70d8bcc01ed48b6beac93db7cd1e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Man_Summer_11
+    second: {fileID: 2100000, guid: 6e3fd377609c0a84f96d6c444bdc09c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_m_body
+    second: {fileID: 2100000, guid: 92d6e674c92c1524da5e124def9b7efa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_m_head
+    second: {fileID: 2100000, guid: b7eaf16ced7e49346aba1eb62053dac3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat.1
+    second: {fileID: 2100000, guid: e41f0c01166c81f43960d89c61d64b53, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Texture0
+    second: {fileID: 2100000, guid: 5caa82be0b743f24688aa4b8cac7bdd8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Texture1
+    second: {fileID: 2100000, guid: 3603f5302cd141548b58273d3932eec8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Texture2
+    second: {fileID: 2100000, guid: 6c9a26b244986cd44801abeb1d6da3fe, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Texture3
+    second: {fileID: 2100000, guid: f3b088ab78c8a864aaca968816d4fed5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Texture4
+    second: {fileID: 2100000, guid: c1b02f3a8d8a8c34aa78184906e69d61, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Texture5
+    second: {fileID: 2100000, guid: 3ab708f0c44774d41a63c8920b873b2b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Texture6
+    second: {fileID: 2100000, guid: fe232e660815bba44b0627b99b1f7de8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: brusthaare
+    second: {fileID: 2100000, guid: af498ab4d05a4374fa8d44c9485a49b8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: object_1
+    second: {fileID: 2100000, guid: 55fc2f584623e424a8a8d646a3150376, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sohle klein
+    second: {fileID: 2100000, guid: baab1ae84b87a7048ab551a76bd689fb, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 10ec815b3de5445598b8e2fa00d3aa97_N_Hair_Normal
+    second: {fileID: 2800000, guid: c8479352e4bd01b4d8771682112a31c5, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 21bb7611cf184401b0a21c2f16c3a02b_A_M_Hair_Color
+    second: {fileID: 2800000, guid: 83ceeafd291aa2248a4394e98badf57d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 3efdaa9029e44468873892835c9d100f_R_T_m_head_Roughness
+    second: {fileID: 2800000, guid: e4722be2f78eb1847b93e58153210776, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 496d7a15c1e04126a94302234974f345_N_M_Cloth_Normal
+    second: {fileID: 2800000, guid: 2ab4e51f86c90a44eb425e1b06565d56, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 61cd0d809ba84593b2701e311c0ed006_R_M_Cloth_R
+    second: {fileID: 2800000, guid: ad4a1200921da2747bb16c4e1f323638, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 8baa64d3302f410789f6ea5ea6a3a959_RGB_M_Cloth_Color
+    second: {fileID: 2800000, guid: 99e5e68819a107e45805ff2695112eab, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 8e0fc5ee194844bb9477d3f0438da42e_N_T_m_body_Normal
+    second: {fileID: 2800000, guid: 71676c063dcedad40aed51fcb8bd6ddc, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 929fa085e47a4040b5f75aae01236c9a_N_T_m_head_Normal
+    second: {fileID: 2800000, guid: 032c1f7a57b0b2c499e080fd51c5ca79, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: b46fedb9378b489b9fbfe32f119c977c_RGB_T_Man_Summer_11_BaseColor
+    second: {fileID: 2800000, guid: 3543e0bbcc04f0049bbc694786ef809f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: brhaare
+    second: {fileID: 2800000, guid: 896414d8913d10a478aabf11d6b22e61, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: d9966d65b33a40c2b3662d72c03044d8_RGB_T_m_body_BaseColor
+    second: {fileID: 2800000, guid: d0f45d2dd6747974e9145c4aff419df3, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: db00d248a00d429495216234088be72d_N_T_Man_Summer_11_Normal
+    second: {fileID: 2800000, guid: 4fa9046ba9d2e624683d15d7947ea703, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: dc6d0f49582a425ca82c85e19032eb5e_R_T_Man_Summer_11_Roughness
+    second: {fileID: 2800000, guid: 2579c9742e019bb4cbbef9479500b6ef, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: eebbeb35e1ba4684a04ee167c8f9d5ba_RGB_T_m_head_BaseColor
+    second: {fileID: 2800000, guid: 766b046b70ef6dc4d85d7aff0aa2cd9d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: fab541ba94d247ce9f3072a16f1eef61_R_T_m_body_Roughness
+    second: {fileID: 2800000, guid: ed2b2756ec2599f4592db8bf5ddccdd3, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: freddie versch gesichter_eyeL_hi
+    second: {fileID: 2800000, guid: a52447fa70e19af44ab45423446d9933, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: freddie versch gesichter_eyeR_hi
+    second: {fileID: 2800000, guid: f48a60300c0c98e41a9cd3674f34df7b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: freddie versch gesichter_sock
+    second: {fileID: 2800000, guid: d0e4616173a7ac24daf5090fa2282299, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: freddie versch gesichter_teethLower
+    second: {fileID: 2800000, guid: fbd6795b42f75cf42bb4c2b3b897bbe6, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: freddie versch gesichter_teethUpper
+    second: {fileID: 2800000, guid: debecf099235d224dbdb5859fe8f1887, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: freddie versch gesichter_tongue
+    second: {fileID: 2800000, guid: 2ea798a97c0949a41955e23ba555e4ba, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: freddie_skin_hi - Kopie2
+    second: {fileID: 2800000, guid: 0e9593e2e3c65c64eab47a168cfe8431, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: freddie_skin_hi gr schnauz
+    second: {fileID: 2800000, guid: 8753fe422c7c2424f81c1e33edd43775, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: haare_Hair_diffuse
+    second: {fileID: 2800000, guid: c5ac750b2ec20a346b7f6033cd72a65c, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: haare_Hair_normal
+    second: {fileID: 2800000, guid: 9e3151b76122b6f4f91b1af9ec62834b, type: 3}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
