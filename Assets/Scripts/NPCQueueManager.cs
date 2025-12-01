@@ -5,32 +5,48 @@ public class NPCQueueManager : MonoBehaviour
 {
     private List<NPCQueueMovement> npcs = new List<NPCQueueMovement>();
 
+    
     public void RegisterNPC(NPCQueueMovement npc)
     {
-        npcs.Add(npc);
+        if (!npcs.Contains(npc))
+            npcs.Add(npc);
     }
 
-    public NPCQueueMovement GetNPCInFrontOf(NPCQueueMovement npc)
+    
+    public int GetPointIndexFor(NPCQueueMovement npc)
     {
+        if (npcs.Count == 0 || npc.queuePoints == null || npc.queuePoints.Length == 0)
+            return 0;
+
+        
+        Transform origin = npc.queuePoints[0];
+
         
         List<NPCQueueMovement> ordered = new List<NPCQueueMovement>(npcs);
-
         ordered.Sort((a, b) =>
         {
-            if (a.currentPointIndex == b.currentPointIndex)
-            {
-                float distA = Vector3.Distance(a.transform.position, npc.queuePoints[a.currentPointIndex].position);
-                float distB = Vector3.Distance(b.transform.position, npc.queuePoints[b.currentPointIndex].position);
-                return distA.CompareTo(distB);
-            }
-
-            return a.currentPointIndex.CompareTo(b.currentPointIndex);
+            float da = Vector3.Distance(a.transform.position, origin.position);
+            float db = Vector3.Distance(b.transform.position, origin.position);
+            return da.CompareTo(db);
         });
 
         int index = ordered.IndexOf(npc);
-        if (index > 0)
-            return ordered[index - 1];
+        if (index < 0) index = 0;
 
+        
+        return Mathf.Min(index, npc.queuePoints.Length - 1);
+    }
+
+    
+    public void RemoveFromQueue(NPCQueueMovement npc)
+    {
+        if (npcs.Contains(npc))
+            npcs.Remove(npc);
+    }
+
+    
+    public NPCQueueMovement GetNPCInFrontOf(NPCQueueMovement npc)
+    {
         return null;
     }
 }
