@@ -19,9 +19,11 @@ public class NPCInteractionData : MonoBehaviour
     public Transform rejectExitPoint;
 
     [Header("Contrabando")]
-    public GameObject contrabandPrefab;        
-    public Transform contrabandSpawnPoint;     
-    [HideInInspector] public GameObject spawnedContraband;
+   
+    public GameObject[] contrabandPrefabs;
+    public Transform contrabandSpawnPoint;
+    
+    [HideInInspector] public GameObject[] spawnedContraband;
 
     private NPCQueueMovement movement;
 
@@ -29,8 +31,6 @@ public class NPCInteractionData : MonoBehaviour
     {
         movement = GetComponent<NPCQueueMovement>();
     }
-
-    
 
     public void ShowDNI()
     {
@@ -60,8 +60,6 @@ public class NPCInteractionData : MonoBehaviour
         else
             Debug.Log(npcName + " se comporta normal");
     }
-
-   
 
     public void EnterClub()
     {

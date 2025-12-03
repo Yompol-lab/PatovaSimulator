@@ -46,11 +46,14 @@ public class GuardController : MonoBehaviour
     {
         Transform npc = npcData.transform;
 
+       
         Vector3 checkPos = npc.position - npc.forward * 0.6f;
         checkPos.y = transform.position.y;
 
+        
         yield return MoveTo(checkPos, npc.position);
 
+       
         if (animator != null)
         {
             animator.SetBool(isWalkingParam, false);
@@ -60,23 +63,44 @@ public class GuardController : MonoBehaviour
         yield return new WaitForSeconds(searchDuration);
 
         
-        if (hasDrugs && npcData.contrabandPrefab != null)
+        if (hasDrugs &&
+            npcData.contrabandPrefabs != null &&
+            npcData.contrabandPrefabs.Length > 0)
         {
-            if (npcData.spawnedContraband == null)
-            {
-                Transform spawn = npcData.contrabandSpawnPoint != null ?
-                    npcData.contrabandSpawnPoint : npc;
+            bool alreadySpawned = npcData.spawnedContraband != null &&
+                                  npcData.spawnedContraband.Length > 0;
 
-                npcData.spawnedContraband = Instantiate(
-                    npcData.contrabandPrefab,
-                    spawn.position + spawn.right * 0.3f,
-                    Quaternion.identity
-                );
+            if (!alreadySpawned)
+            {
+                int count = npcData.contrabandPrefabs.Length;
+                npcData.spawnedContraband = new GameObject[count];
+
+                Transform baseSpawn = npcData.contrabandSpawnPoint != null
+                    ? npcData.contrabandSpawnPoint
+                    : npc;
+
+                for (int i = 0; i < count; i++)
+                {
+                    GameObject prefab = npcData.contrabandPrefabs[i];
+                    if (prefab == null) continue;
+
+                    
+                    Vector3 offset = baseSpawn.right * (0.3f * i);
+
+                    npcData.spawnedContraband[i] = Instantiate(
+                        prefab,
+                        baseSpawn.position + offset,
+                        Quaternion.identity
+                    );
+                }
             }
         }
 
-        yield return MoveTo(homePoint.position,
-            lookTarget != null ? lookTarget.position : transform.position);
+        
+        yield return MoveTo(
+            homePoint.position,
+            lookTarget != null ? lookTarget.position : transform.position
+        );
 
         currentRoutine = null;
     }
@@ -114,6 +138,7 @@ public class GuardController : MonoBehaviour
             yield return null;
         }
 
+        
         Vector3 lookDir = lookAtPos - transform.position;
         lookDir.y = 0f;
 

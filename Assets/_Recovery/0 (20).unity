@@ -6262,8 +6262,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 12.7943, y: -0.2293}
-  m_SizeDelta: {x: 235.2165, y: 449.3737}
+  m_AnchoredPosition: {x: -7.9766, y: -9.306}
+  m_SizeDelta: {x: 449.1983, y: 180.6523}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1103874519
 MonoBehaviour:
@@ -8914,7 +8914,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 99.3, y: 171}
+  m_AnchoredPosition: {x: 208, y: 74}
   m_SizeDelta: {x: 95.3007, y: 66.3379}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1515631768
@@ -9232,7 +9232,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 0
 --- !u!1001 &1566638998
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12102,7 +12102,7 @@ MonoBehaviour:
   npcName: '"Bob"'
   dni: BOB
   dniImagen: {fileID: 21300000, guid: 2cf869f8a9051c049823206f36462096, type: 3}
-  ticketImagen: {fileID: 21300000, guid: 1b990a829057a4d42bbd46d051344330, type: 3}
+  ticketImagen: {fileID: 0}
   hasDrugs: 1
   badBehavior: 0
   dressCodeBad: 1
