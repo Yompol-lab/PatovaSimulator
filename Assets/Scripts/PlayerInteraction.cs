@@ -1,46 +1,58 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;   
+using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    [Header("Interacción")]
+    [Header("InteracciÃ³n NPC")]
     public float interactDistance = 2.5f;
     public LayerMask npcLayer;
 
-    [Header("UI (botones sueltos)")]
+    [Header("UI Principal")]
     public GameObject interactionRoot;
     public Button btnDNI;
-    public Button btnGuardia;
+    public Button btnEntrada;
     public Button btnVestimenta;
+    public Button btnGuardia;
     public Button btnComportamiento;
     public Button btnAceptar;
     public Button btnRechazar;
 
     [Header("UI DNI")]
+    public GameObject DNIPanelRoot;
     public Image dniImage;
+    public Button btnCerrarDNI;
+
+    [Header("UI Ticket")]
+    public GameObject TicketPanelRoot;
+    public Image ticketImage;
+    public Button btnCerrarTicket;
 
     [Header("Crosshair")]
     public GameObject crosshair;
 
+    [Header("Guardia")]
+    public GuardController guardController;
+
     [Header("Contrabando")]
-    public Transform handHoldPoint;     
-    public LayerMask contrabandLayer;   
-    public LayerMask trashLayer;        
+    public Transform handHoldPoint;
+    public LayerMask contrabandLayer;
 
     private Camera cam;
+    private FirstPersonCamera cameraFPS;
     private NPCInteractionData currentNPC;
+    private bool menuAbierto = false;
+
     private GameObject carriedContraband;
 
     void Start()
     {
         cam = Camera.main;
+        cameraFPS = cam.GetComponent<FirstPersonCamera>();
 
-        if (interactionRoot != null)
-            interactionRoot.SetActive(false);
-
-        if (dniImage != null)
-            dniImage.gameObject.SetActive(false);
+        if (interactionRoot != null) interactionRoot.SetActive(false);
+        if (DNIPanelRoot != null) DNIPanelRoot.SetActive(false);
+        if (TicketPanelRoot != null) TicketPanelRoot.SetActive(false);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -49,90 +61,83 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current == null || Mouse.current == null) return;
+        if (Keyboard.current == null || Mouse.current == null)
+            return;
 
-        
         if (Keyboard.current.eKey.wasPressedThisFrame)
         {
-            TryOpenInteraction();
+            if (!menuAbierto)
+                TryOpenInteraction();
+            else
+                CloseAllMenus();
         }
 
-        if (Keyboard.current.eKey.wasReleasedThisFrame)
-        {
-            CloseButtons();
-        }
-
-        
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             if (carriedContraband == null)
                 TryPickupContraband();
             else
-                TryThrowContraband();
+                DropContraband();
         }
     }
 
-   
-
     void TryOpenInteraction()
     {
-        if (interactionRoot != null && interactionRoot.activeSelf)
-            return;
-
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        RaycastHit hit;
-
-        if (!Physics.Raycast(ray, out hit, interactDistance, npcLayer))
+        if (!Physics.Raycast(ray, out RaycastHit hit, interactDistance, npcLayer))
             return;
 
-        NPCInteractionData npcData = hit.collider.GetComponentInParent<NPCInteractionData>();
-        if (npcData == null) return;
+        NPCInteractionData npc = hit.collider.GetComponentInParent<NPCInteractionData>();
+        if (npc == null) return;
 
-        NPCQueueMovement move = npcData.GetComponent<NPCQueueMovement>();
-        if (move == null || !move.IsFirstInLine)
+        NPCQueueMovement move = npc.GetComponent<NPCQueueMovement>();
+        if (move != null && !move.IsFirstInLine)
             return;
 
-        currentNPC = npcData;
-        OpenButtons();
+        currentNPC = npc;
+        OpenMainMenu();
     }
 
-    void OpenButtons()
+    void OpenMainMenu()
     {
-        if (interactionRoot == null) return;
+        menuAbierto = true;
 
         interactionRoot.SetActive(true);
+        if (DNIPanelRoot != null) DNIPanelRoot.SetActive(false);
+        if (TicketPanelRoot != null) TicketPanelRoot.SetActive(false);
 
-        
+        if (cameraFPS != null) cameraFPS.freezeCamera = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         if (crosshair != null) crosshair.SetActive(false);
 
-        
         btnDNI.onClick.RemoveAllListeners();
+        btnEntrada.onClick.RemoveAllListeners();
         btnGuardia.onClick.RemoveAllListeners();
         btnVestimenta.onClick.RemoveAllListeners();
         btnComportamiento.onClick.RemoveAllListeners();
         btnAceptar.onClick.RemoveAllListeners();
         btnRechazar.onClick.RemoveAllListeners();
 
-       
-        btnDNI.onClick.AddListener(ShowCurrentNPCDNI);
-        btnGuardia.onClick.AddListener(() => currentNPC.PerformGuardCheck());
+        btnDNI.onClick.AddListener(ShowDNI);
+        btnEntrada.onClick.AddListener(ShowTicket);
+        if (guardController != null)
+            btnGuardia.onClick.AddListener(() => guardController.StartCheck(currentNPC, currentNPC.hasDrugs));
         btnVestimenta.onClick.AddListener(() => currentNPC.CheckDressCode());
         btnComportamiento.onClick.AddListener(() => currentNPC.CheckBehavior());
         btnAceptar.onClick.AddListener(AcceptNPC);
         btnRechazar.onClick.AddListener(RejectNPC);
     }
 
-    void CloseButtons()
+    void CloseAllMenus()
     {
-        if (interactionRoot != null)
-            interactionRoot.SetActive(false);
+        menuAbierto = false;
 
-        if (dniImage != null)
-            dniImage.gameObject.SetActive(false);
+        if (interactionRoot != null) interactionRoot.SetActive(false);
+        if (DNIPanelRoot != null) DNIPanelRoot.SetActive(false);
+        if (TicketPanelRoot != null) TicketPanelRoot.SetActive(false);
 
-        
+        if (cameraFPS != null) cameraFPS.freezeCamera = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         if (crosshair != null) crosshair.SetActive(true);
@@ -140,82 +145,93 @@ public class PlayerInteraction : MonoBehaviour
         currentNPC = null;
     }
 
-    void ShowCurrentNPCDNI()
+    void ShowDNI()
     {
-        if (currentNPC == null || dniImage == null) return;
+        if (currentNPC == null || DNIPanelRoot == null || dniImage == null) return;
 
-        if (currentNPC.dniImagen == null)
-        {
-            Debug.LogWarning("El NPC " + currentNPC.npcName + " no tiene dniImagen asignado.");
-            return;
-        }
+        interactionRoot.SetActive(false);
+        DNIPanelRoot.SetActive(true);
 
         dniImage.sprite = currentNPC.dniImagen;
-        dniImage.gameObject.SetActive(true);
+
+        btnCerrarDNI.onClick.RemoveAllListeners();
+        btnCerrarDNI.onClick.AddListener(() =>
+        {
+            DNIPanelRoot.SetActive(false);
+            interactionRoot.SetActive(true);
+        });
+    }
+
+    void ShowTicket()
+    {
+        if (currentNPC == null || TicketPanelRoot == null || ticketImage == null) return;
+
+        interactionRoot.SetActive(false);
+        TicketPanelRoot.SetActive(true);
+
+        ticketImage.sprite = currentNPC.ticketImagen;
+
+        btnCerrarTicket.onClick.RemoveAllListeners();
+        btnCerrarTicket.onClick.AddListener(() =>
+        {
+            TicketPanelRoot.SetActive(false);
+            interactionRoot.SetActive(true);
+        });
     }
 
     void AcceptNPC()
     {
-        if (currentNPC != null)
-            currentNPC.EnterClub();
-
-        CloseButtons();
+        currentNPC?.EnterClub();
+        CloseAllMenus();
     }
 
     void RejectNPC()
     {
-        if (currentNPC != null)
-            currentNPC.LeaveClub();
-
-        CloseButtons();
+        currentNPC?.LeaveClub();
+        CloseAllMenus();
     }
-
-    
 
     void TryPickupContraband()
     {
         if (handHoldPoint == null) return;
 
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        RaycastHit hit;
-
-        if (!Physics.Raycast(ray, out hit, interactDistance, contrabandLayer))
+        if (!Physics.Raycast(ray, out RaycastHit hit, interactDistance, contrabandLayer))
             return;
 
         GameObject obj = hit.collider.gameObject;
         carriedContraband = obj;
 
         
-        obj.transform.SetParent(handHoldPoint);
-        obj.transform.localPosition = Vector3.zero;
-        obj.transform.localRotation = Quaternion.identity;
+        carriedContraband.transform.SetParent(handHoldPoint);
+        carriedContraband.transform.localPosition = Vector3.zero;
+        carriedContraband.transform.localRotation = Quaternion.identity;
 
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        Rigidbody rb = carriedContraband.GetComponent<Rigidbody>();
         if (rb != null)
+        {
             rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
-    void TryThrowContraband()
+
+    void DropContraband()
     {
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        RaycastHit hit;
+        if (carriedContraband == null) return;
 
-        
-        if (Physics.Raycast(ray, out hit, interactDistance, trashLayer))
-        {
-            
-            Destroy(carriedContraband);
-            carriedContraband = null;
-            Debug.Log("Tiraste la merca a la basura");
-            return;
-        }
-
-        
         carriedContraband.transform.SetParent(null);
+
         Rigidbody rb = carriedContraband.GetComponent<Rigidbody>();
         if (rb != null)
             rb.isKinematic = false;
 
         carriedContraband = null;
+    }
+
+    public GameObject GetCarriedContraband()
+    {
+        return carriedContraband;
     }
 }

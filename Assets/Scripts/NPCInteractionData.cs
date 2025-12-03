@@ -5,7 +5,9 @@ public class NPCInteractionData : MonoBehaviour
     [Header("Identidad")]
     public string npcName;
     public string dni;
+
     public Sprite dniImagen;
+    public Sprite ticketImagen;
 
     [Header("Estado")]
     public bool hasDrugs = false;
@@ -16,12 +18,9 @@ public class NPCInteractionData : MonoBehaviour
     public Transform insideClubPoint;
     public Transform rejectExitPoint;
 
-    [Header("Policía / Guardia")]
-    public GuardController guard;   
-
     [Header("Contrabando")]
-    public GameObject contrabandPrefab;      
-    public Transform contrabandSpawnPoint;   
+    public GameObject contrabandPrefab;        
+    public Transform contrabandSpawnPoint;     
     [HideInInspector] public GameObject spawnedContraband;
 
     private NPCQueueMovement movement;
@@ -31,28 +30,19 @@ public class NPCInteractionData : MonoBehaviour
         movement = GetComponent<NPCQueueMovement>();
     }
 
+    
+
     public void ShowDNI()
     {
         Debug.Log("DNI de " + npcName + ": " + dni);
-       
     }
 
     public void PerformGuardCheck()
     {
-        Debug.Log("Guardia revisa a " + npcName);
-
-        if (guard != null)
-        {
-            guard.StartCheck(this, hasDrugs);
-        }
+        if (hasDrugs)
+            Debug.Log(npcName + " TIENE merca encima");
         else
-        {
-            
-            if (hasDrugs)
-                Debug.Log(npcName + " TIENE merca encima");
-            else
-                Debug.Log(npcName + " está limpio");
-        }
+            Debug.Log(npcName + " está limpio");
     }
 
     public void CheckDressCode()
@@ -70,6 +60,8 @@ public class NPCInteractionData : MonoBehaviour
         else
             Debug.Log(npcName + " se comporta normal");
     }
+
+   
 
     public void EnterClub()
     {

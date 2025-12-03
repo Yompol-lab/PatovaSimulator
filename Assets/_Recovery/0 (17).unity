@@ -1160,14 +1160,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 5390452360692660161, guid: 5621aa4915c640b4da9c0a273c74e932, type: 3}
-      propertyPath: m_Convex
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5390452360692660161, guid: 5621aa4915c640b4da9c0a273c74e932, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7207479824348937094, guid: 5621aa4915c640b4da9c0a273c74e932, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -1227,10 +1219,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5390452360692660160, guid: 5621aa4915c640b4da9c0a273c74e932, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 681685977}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5621aa4915c640b4da9c0a273c74e932, type: 3}
 --- !u!4 &230617773 stripped
 Transform:
@@ -2284,8 +2273,7 @@ Transform:
   m_LocalPosition: {x: -0.002, y: 1.918, z: 0.034}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2068287443}
+  m_Children: []
   m_Father: {fileID: 2083636133}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
@@ -4341,23 +4329,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 674285950}
   m_CullTransparentMesh: 1
---- !u!1 &681685973 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5390452360692660160, guid: 5621aa4915c640b4da9c0a273c74e932, type: 3}
-  m_PrefabInstance: {fileID: 230617772}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &681685977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 681685973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17d99c2d063edd849a051911dd40be61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TrashCan
 --- !u!1 &683438479
 GameObject:
   m_ObjectHideFlags: 0
@@ -4769,10 +4740,6 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e1b7a2e138796954fb6c53c962cfd03d, type: 3}
       propertyPath: m_Layer
       value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: e1b7a2e138796954fb6c53c962cfd03d, type: 3}
-      propertyPath: m_TagString
-      value: IllegalItem
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11254,13 +11221,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2068287442}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.70316845, y: -0, z: -0, w: 0.71102333}
-  m_LocalPosition: {x: 0.002, y: -0.088, z: 1.276}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.367, z: 0.781}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 330585546}
-  m_LocalEulerAnglesHint: {x: -89.364, y: 0, z: 0}
+  m_Father: {fileID: 2083636133}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2082019421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11471,6 +11438,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 400154, guid: 69e0bf832ba8212478b45616cc569f75, type: 3}
       insertIndex: -1
       addedObject: {fileID: 330585546}
+    - targetCorrespondingSourceObject: {fileID: 400154, guid: 69e0bf832ba8212478b45616cc569f75, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2068287443}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 100154, guid: 69e0bf832ba8212478b45616cc569f75, type: 3}
       insertIndex: -1
@@ -11528,23 +11498,26 @@ MonoBehaviour:
   interactionRoot: {fileID: 1925644391}
   btnDNI: {fileID: 674285952}
   btnEntrada: {fileID: 1199850757}
-  btnVestimenta: {fileID: 656571100}
-  btnGuardia: {fileID: 1328114756}
-  btnComportamiento: {fileID: 1476054552}
   btnAceptar: {fileID: 985094279}
   btnRechazar: {fileID: 643400655}
-  DNIPanelRoot: {fileID: 296718611}
+  btnGuardia: {fileID: 1328114756}
+  btnVestimenta: {fileID: 656571100}
+  btnComportamiento: {fileID: 1476054552}
+  dniPanelRoot: {fileID: 296718611}
   dniImage: {fileID: 1243126042}
   btnCerrarDNI: {fileID: 428156186}
-  TicketPanelRoot: {fileID: 1055869136}
+  ticketPanelRoot: {fileID: 1055869136}
   ticketImage: {fileID: 1103874519}
-  btnCerrarTicket: {fileID: 1515631768}
+  btnCerrarEntrada: {fileID: 1515631768}
   crosshair: {fileID: 1405853345}
   guardController: {fileID: 490687538}
-  handHoldPoint: {fileID: 2068287443}
+  handHoldPoint: {fileID: 0}
   contrabandLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
+  trashLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &2083636139
 MonoBehaviour:
   m_ObjectHideFlags: 0

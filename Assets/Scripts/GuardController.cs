@@ -8,14 +8,14 @@ public class GuardController : MonoBehaviour
     public float stopDistance = 0.2f;
 
     [Header("Puntos")]
-    public Transform homePoint;         
-    public Transform lookTarget;        
+    public Transform homePoint;
+    public Transform lookTarget;
 
     [Header("Animación")]
     public Animator animator;
-    public string isWalkingParam = "IsWalking"; 
-    public string searchTrigger = "Search";    
-    public float searchDuration = 2f;          
+    public string isWalkingParam = "IsWalking";
+    public string searchTrigger = "Search";
+    public float searchDuration = 2f;
 
     private Coroutine currentRoutine;
 
@@ -23,7 +23,6 @@ public class GuardController : MonoBehaviour
     {
         if (homePoint == null)
         {
-            
             GameObject home = new GameObject(name + "_Home");
             home.transform.position = transform.position;
             home.transform.rotation = transform.rotation;
@@ -47,15 +46,12 @@ public class GuardController : MonoBehaviour
     {
         Transform npc = npcData.transform;
 
-        
         Vector3 checkPos = npc.position - npc.forward * 0.6f;
         checkPos.y = transform.position.y;
 
-        
         yield return MoveTo(checkPos, npc.position);
 
-        
-        if (animator != null && !string.IsNullOrEmpty(searchTrigger))
+        if (animator != null)
         {
             animator.SetBool(isWalkingParam, false);
             animator.SetTrigger(searchTrigger);
@@ -66,14 +62,12 @@ public class GuardController : MonoBehaviour
         
         if (hasDrugs && npcData.contrabandPrefab != null)
         {
-            
             if (npcData.spawnedContraband == null)
             {
-                Transform spawn = npcData.contrabandSpawnPoint != null
-                    ? npcData.contrabandSpawnPoint
-                    : npc;
+                Transform spawn = npcData.contrabandSpawnPoint != null ?
+                    npcData.contrabandSpawnPoint : npc;
 
-                npcData.spawnedContraband = GameObject.Instantiate(
+                npcData.spawnedContraband = Instantiate(
                     npcData.contrabandPrefab,
                     spawn.position + spawn.right * 0.3f,
                     Quaternion.identity
@@ -81,8 +75,8 @@ public class GuardController : MonoBehaviour
             }
         }
 
-        // 4) Volver a casa
-        yield return MoveTo(homePoint.position, lookTarget != null ? lookTarget.position : transform.position);
+        yield return MoveTo(homePoint.position,
+            lookTarget != null ? lookTarget.position : transform.position);
 
         currentRoutine = null;
     }
@@ -104,7 +98,7 @@ public class GuardController : MonoBehaviour
 
             transform.position += step;
 
-            if (dir.sqrMagnitude > 0.0001f)
+            if (dir.sqrMagnitude > 0.001f)
             {
                 Quaternion rot = Quaternion.LookRotation(dir);
                 transform.rotation = Quaternion.RotateTowards(
@@ -120,14 +114,11 @@ public class GuardController : MonoBehaviour
             yield return null;
         }
 
-        
         Vector3 lookDir = lookAtPos - transform.position;
         lookDir.y = 0f;
-        if (lookDir.sqrMagnitude > 0.0001f)
-        {
-            Quaternion rot = Quaternion.LookRotation(lookDir);
-            transform.rotation = rot;
-        }
+
+        if (lookDir.sqrMagnitude > 0.001f)
+            transform.rotation = Quaternion.LookRotation(lookDir);
 
         if (animator != null)
             animator.SetBool(isWalkingParam, false);
