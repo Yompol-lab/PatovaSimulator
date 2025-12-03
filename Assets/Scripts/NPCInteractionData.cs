@@ -16,6 +16,14 @@ public class NPCInteractionData : MonoBehaviour
     public Transform insideClubPoint;
     public Transform rejectExitPoint;
 
+    [Header("Policía / Guardia")]
+    public GuardController guard;   
+
+    [Header("Contrabando")]
+    public GameObject contrabandPrefab;      
+    public Transform contrabandSpawnPoint;   
+    [HideInInspector] public GameObject spawnedContraband;
+
     private NPCQueueMovement movement;
 
     void Start()
@@ -25,39 +33,53 @@ public class NPCInteractionData : MonoBehaviour
 
     public void ShowDNI()
     {
-        Debug.Log("Mostrando DNI: " + npcName);
+        Debug.Log("DNI de " + npcName + ": " + dni);
+       
     }
 
     public void PerformGuardCheck()
     {
-        Debug.Log(hasDrugs ? npcName + " TIENE MERCA" : npcName + " está limpio");
+        Debug.Log("Guardia revisa a " + npcName);
+
+        if (guard != null)
+        {
+            guard.StartCheck(this, hasDrugs);
+        }
+        else
+        {
+            
+            if (hasDrugs)
+                Debug.Log(npcName + " TIENE merca encima");
+            else
+                Debug.Log(npcName + " está limpio");
+        }
     }
 
     public void CheckDressCode()
     {
-        Debug.Log(dressCodeBad ? npcName + " NO cumple vestimenta" : npcName + " está bien vestido");
+        if (dressCodeBad)
+            Debug.Log(npcName + " NO cumple el código de vestimenta");
+        else
+            Debug.Log(npcName + " está bien vestido");
     }
 
     public void CheckBehavior()
     {
-        Debug.Log(badBehavior ? npcName + " se comporta mal" : npcName + " normal");
+        if (badBehavior)
+            Debug.Log(npcName + " se comporta mal / dudoso");
+        else
+            Debug.Log(npcName + " se comporta normal");
     }
 
-    
     public void EnterClub()
     {
         if (movement != null && insideClubPoint != null)
-        {
             movement.GoToPoint(insideClubPoint.position, true);
-        }
     }
 
-   
     public void LeaveClub()
     {
         if (movement != null && rejectExitPoint != null)
-        {
-            movement.GoToPoint(rejectExitPoint.position, true);
-        }
+            movement.GoToPoint(rejectExitPoint.position, false);
     }
 }

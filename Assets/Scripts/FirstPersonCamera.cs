@@ -5,29 +5,48 @@ public class FirstPersonCamera : MonoBehaviour
 {
     [HideInInspector] public bool freezeCamera = false;
 
+    [Header("Referencia al cuerpo del jugador")]
+    public Transform playerBody;    
+
     [Header("Rotación con el mouse")]
     public float mouseSensitivity = 0.15f;
 
-    [Header("Límites verticales")]
+    [Header("Límites verticales (mirar arriba/abajo)")]
     public float minPitch = -60f;
     public float maxPitch = 60f;
 
     [Header("Límites horizontales (evitar mirar atrás)")]
-    public float minYaw = -90f;
-    public float maxYaw = 90f;
+    public float minYaw = -90f;      
+    public float maxYaw = 90f;       
 
-    private float yaw;
+    private float yawOffset;        
     private float pitch;
+    private float baseBodyYaw;       
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (playerBody == null)
+        {
+           
+            playerBody = transform.parent;
+        }
+
+        if (playerBody == null)
+        {
+            Debug.LogWarning("FirstPersonCamera: no se asignó playerBody.");
+            baseBodyYaw = 0f;
+        }
+        else
+        {
+            baseBodyYaw = playerBody.localEulerAngles.y;
+        }
 
         
-        Vector3 rot = transform.localRotation.eulerAngles;
-        pitch = rot.x;
-        yaw = rot.y;
+        pitch = transform.localEulerAngles.x;
+        yawOffset = 0f;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void LateUpdate()
@@ -41,14 +60,27 @@ public class FirstPersonCamera : MonoBehaviour
         float mouseX = delta.x * mouseSensitivity;
         float mouseY = delta.y * mouseSensitivity;
 
-        yaw += mouseX;
-        pitch -= mouseY;
-
-        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
-        yaw = Mathf.Clamp(yaw, minYaw, maxYaw);
-
-        transform.localRotation = Quaternion.Euler(pitch, yaw, 0f);
-
         
+        yawOffset += mouseX;
+        yawOffset = Mathf.Clamp(yawOffset, minYaw, maxYaw);
+
+        float finalBodyYaw = baseBodyYaw + yawOffset;
+
+        if (playerBody != null)
+        {
+            Vector3 bodyEuler = playerBody.localEulerAngles;
+            bodyEuler.y = finalBodyYaw;
+            playerBody.localEulerAngles = bodyEuler;
+        }
+
+       
+        pitch -= mouseY;
+        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+
+        Vector3 camEuler = transform.localEulerAngles;
+        camEuler.x = pitch;
+        camEuler.y = 0f;   
+        camEuler.z = 0f;
+        transform.localEulerAngles = camEuler;
     }
 }

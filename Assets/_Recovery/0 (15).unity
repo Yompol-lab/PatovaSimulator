@@ -2296,7 +2296,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FirstPersonCamera
   freezeCamera: 0
-  playerBody: {fileID: 0}
   mouseSensitivity: 0.08
   minPitch: -60
   maxPitch: 60
@@ -10532,9 +10531,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100154, guid: 69e0bf832ba8212478b45616cc569f75, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2083636139}
-    - targetCorrespondingSourceObject: {fileID: 100154, guid: 69e0bf832ba8212478b45616cc569f75, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2083636141}
   m_SourcePrefab: {fileID: 100100000, guid: 69e0bf832ba8212478b45616cc569f75, type: 3}
 --- !u!4 &2083636133 stripped
 Transform:
@@ -10548,7 +10544,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1686005322}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c30fb69df69ad904ca47c4529ec2a42e, type: 3}
   m_Name: 
@@ -10631,68 +10627,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.93, z: 0}
---- !u!114 &2083636141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1686005322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: 54a6a475264a0a84385c60d5f1e1718c, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2083636139}
-        m_TargetAssemblyTypeName: PlayerMovementFPS, Assembly-CSharp
-        m_MethodName: OnMove
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 8f4b5aaa-9c61-4d7f-b289-523c10c01155
-    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/a,/Keyboard/s,/Keyboard/d]'
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2083636139}
-        m_TargetAssemblyTypeName: PlayerMovementFPS, Assembly-CSharp
-        m_MethodName: OnJump
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 2de26000-dd8d-4e22-bfb3-2fd881c04cce
-    m_ActionName: 'Player/Jump[/Keyboard/space]'
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 330585545}
 --- !u!1 &2089027572 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ea371fd7f8b15fb429ad73294c631384, type: 3}

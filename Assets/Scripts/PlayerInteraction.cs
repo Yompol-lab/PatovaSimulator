@@ -6,10 +6,10 @@ public class PlayerInteraction : MonoBehaviour
 {
     [Header("Interacción")]
     public float interactDistance = 2.5f;
-    public LayerMask npcLayer;          
+    public LayerMask npcLayer;
 
     [Header("UI (botones sueltos)")]
-    public GameObject interactionRoot;   
+    public GameObject interactionRoot;
     public Button btnDNI;
     public Button btnGuardia;
     public Button btnVestimenta;
@@ -18,20 +18,23 @@ public class PlayerInteraction : MonoBehaviour
     public Button btnRechazar;
 
     [Header("UI DNI")]
-    public Image dniImage;             
+    public Image dniImage;
 
     [Header("Crosshair")]
-    public GameObject crosshair;        
+    public GameObject crosshair;
+
+    [Header("Contrabando")]
+    public Transform handHoldPoint;     
+    public LayerMask contrabandLayer;   
+    public LayerMask trashLayer;        
 
     private Camera cam;
     private NPCInteractionData currentNPC;
-    private FirstPersonCamera camController;   
+    private GameObject carriedContraband;
 
     void Start()
     {
         cam = Camera.main;
-        if (cam != null)
-            camController = cam.GetComponent<FirstPersonCamera>(); 
 
         if (interactionRoot != null)
             interactionRoot.SetActive(false);
@@ -39,7 +42,6 @@ public class PlayerInteraction : MonoBehaviour
         if (dniImage != null)
             dniImage.gameObject.SetActive(false);
 
-        
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         if (crosshair != null) crosshair.SetActive(true);
@@ -47,7 +49,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current == null) return;
+        if (Keyboard.current == null || Mouse.current == null) return;
 
         
         if (Keyboard.current.eKey.wasPressedThisFrame)
@@ -55,42 +57,40 @@ public class PlayerInteraction : MonoBehaviour
             TryOpenInteraction();
         }
 
-        
         if (Keyboard.current.eKey.wasReleasedThisFrame)
         {
             CloseButtons();
         }
+
+        
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            if (carriedContraband == null)
+                TryPickupContraband();
+            else
+                TryThrowContraband();
+        }
     }
+
+   
 
     void TryOpenInteraction()
     {
-       
         if (interactionRoot != null && interactionRoot.activeSelf)
             return;
 
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         RaycastHit hit;
 
-        
         if (!Physics.Raycast(ray, out hit, interactDistance, npcLayer))
-        {
-            Debug.Log("Raycast no pegó en ningún NPC.");
             return;
-        }
 
         NPCInteractionData npcData = hit.collider.GetComponentInParent<NPCInteractionData>();
-        if (npcData == null)
-        {
-            Debug.Log("El objeto golpeado no tiene NPCInteractionData.");
-            return;
-        }
+        if (npcData == null) return;
 
         NPCQueueMovement move = npcData.GetComponent<NPCQueueMovement>();
         if (move == null || !move.IsFirstInLine)
-        {
-            Debug.Log("NPC no es el primero de la fila o no tiene NPCQueueMovement.");
             return;
-        }
 
         currentNPC = npcData;
         OpenButtons();
@@ -106,7 +106,6 @@ public class PlayerInteraction : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         if (crosshair != null) crosshair.SetActive(false);
-        if (camController != null) camController.freezeCamera = true;
 
         
         btnDNI.onClick.RemoveAllListeners();
@@ -116,7 +115,7 @@ public class PlayerInteraction : MonoBehaviour
         btnAceptar.onClick.RemoveAllListeners();
         btnRechazar.onClick.RemoveAllListeners();
 
-      
+       
         btnDNI.onClick.AddListener(ShowCurrentNPCDNI);
         btnGuardia.onClick.AddListener(() => currentNPC.PerformGuardCheck());
         btnVestimenta.onClick.AddListener(() => currentNPC.CheckDressCode());
@@ -130,7 +129,6 @@ public class PlayerInteraction : MonoBehaviour
         if (interactionRoot != null)
             interactionRoot.SetActive(false);
 
-       
         if (dniImage != null)
             dniImage.gameObject.SetActive(false);
 
@@ -138,19 +136,13 @@ public class PlayerInteraction : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         if (crosshair != null) crosshair.SetActive(true);
-        if (camController != null) camController.freezeCamera = false;
 
         currentNPC = null;
     }
 
-    
     void ShowCurrentNPCDNI()
     {
-        if (currentNPC == null || dniImage == null)
-        {
-            Debug.LogWarning("No hay currentNPC o dniImage sin asignar en el inspector.");
-            return;
-        }
+        if (currentNPC == null || dniImage == null) return;
 
         if (currentNPC.dniImagen == null)
         {
@@ -158,20 +150,14 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        Debug.Log("Mostrando DNI de " + currentNPC.npcName);
-
         dniImage.sprite = currentNPC.dniImagen;
         dniImage.gameObject.SetActive(true);
-
-        
-        dniImage.transform.SetAsLastSibling();
     }
 
-    
     void AcceptNPC()
     {
         if (currentNPC != null)
-            currentNPC.EnterClub();      
+            currentNPC.EnterClub();
 
         CloseButtons();
     }
@@ -179,8 +165,57 @@ public class PlayerInteraction : MonoBehaviour
     void RejectNPC()
     {
         if (currentNPC != null)
-            currentNPC.LeaveClub();      
+            currentNPC.LeaveClub();
 
         CloseButtons();
+    }
+
+    
+
+    void TryPickupContraband()
+    {
+        if (handHoldPoint == null) return;
+
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        RaycastHit hit;
+
+        if (!Physics.Raycast(ray, out hit, interactDistance, contrabandLayer))
+            return;
+
+        GameObject obj = hit.collider.gameObject;
+        carriedContraband = obj;
+
+        
+        obj.transform.SetParent(handHoldPoint);
+        obj.transform.localPosition = Vector3.zero;
+        obj.transform.localRotation = Quaternion.identity;
+
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb != null)
+            rb.isKinematic = true;
+    }
+
+    void TryThrowContraband()
+    {
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        RaycastHit hit;
+
+        
+        if (Physics.Raycast(ray, out hit, interactDistance, trashLayer))
+        {
+            
+            Destroy(carriedContraband);
+            carriedContraband = null;
+            Debug.Log("Tiraste la merca a la basura");
+            return;
+        }
+
+        
+        carriedContraband.transform.SetParent(null);
+        Rigidbody rb = carriedContraband.GetComponent<Rigidbody>();
+        if (rb != null)
+            rb.isKinematic = false;
+
+        carriedContraband = null;
     }
 }
