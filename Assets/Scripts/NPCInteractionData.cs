@@ -70,6 +70,6 @@ public class NPCInteractionData : MonoBehaviour
     public void LeaveClub()
     {
         if (movement != null && rejectExitPoint != null)
-            movement.GoToPoint(rejectExitPoint.position, false);
+            movement.GoToPoint(rejectExitPoint.position, true);
     }
 }
