@@ -19,18 +19,30 @@ public class NPCInteractionData : MonoBehaviour
     public Transform rejectExitPoint;
 
     [Header("Contrabando")]
-   
     public GameObject[] contrabandPrefabs;
     public Transform contrabandSpawnPoint;
-    
     [HideInInspector] public GameObject[] spawnedContraband;
+
+    [Header("Puntuación / Flecha")]
+    [Tooltip("Si está marcado: este NPC debería SUMAR si lo dejás pasar.")]
+    public bool sumaPuntos;
+
+    [Tooltip("Si está marcado: este NPC debería SUMAR si lo RECHAZÁS.")]
+    public bool restaPuntos;
+
+    public ReputationArrow arrowController;
 
     private NPCQueueMovement movement;
 
     void Start()
     {
         movement = GetComponent<NPCQueueMovement>();
+
+        if (arrowController == null)
+            arrowController = FindObjectOfType<ReputationArrow>();
     }
+
+    
 
     public void ShowDNI()
     {
@@ -71,5 +83,35 @@ public class NPCInteractionData : MonoBehaviour
     {
         if (movement != null && rejectExitPoint != null)
             movement.GoToPoint(rejectExitPoint.position, true);
+    }
+
+    
+    public void ApplyDecisionToArrow(bool decisionLetPass)
+    {
+        if (arrowController == null)
+            return;
+
+        bool correctDecision = false;
+
+       
+
+        if (sumaPuntos)
+        {
+            correctDecision = decisionLetPass;      
+        }
+        else if (restaPuntos)
+        {
+            correctDecision = !decisionLetPass;     
+        }
+        else
+        {
+            
+            return;
+        }
+
+        if (correctDecision)
+            arrowController.ApplyGoodDecision();  
+        else
+            arrowController.ApplyBadDecision();   
     }
 }

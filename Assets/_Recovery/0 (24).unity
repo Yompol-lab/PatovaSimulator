@@ -3765,19 +3765,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 643400656}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2083636142}
-        m_TargetAssemblyTypeName: NPCDialogueAudio, Assembly-CSharp
-        m_MethodName: PlayDenegarAcceso
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &643400656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3898,19 +3886,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 656571101}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2083636142}
-        m_TargetAssemblyTypeName: NPCDialogueAudio, Assembly-CSharp
-        m_MethodName: PlayVestimenta
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &656571101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5256,19 +5232,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 985094280}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2083636142}
-        m_TargetAssemblyTypeName: NPCDialogueAudio, Assembly-CSharp
-        m_MethodName: PlayDejarPasar
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &985094280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6230,19 +6194,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1199850758}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2083636142}
-        m_TargetAssemblyTypeName: NPCDialogueAudio, Assembly-CSharp
-        m_MethodName: PlayEntrada
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1199850758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6854,7 +6806,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 20.999023, y: -10}
+  m_AnchoredPosition: {x: 20.999, y: -10}
   m_SizeDelta: {x: -160.7217, y: -83.3932}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1297702633
@@ -7113,19 +7065,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1328114757}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2083636142}
-        m_TargetAssemblyTypeName: NPCDialogueAudio, Assembly-CSharp
-        m_MethodName: PlayCacheo
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1328114757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7762,19 +7702,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1476054553}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2083636142}
-        m_TargetAssemblyTypeName: NPCDialogueAudio, Assembly-CSharp
-        m_MethodName: PlayComportamiento
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1476054553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8787,9 +8715,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsPanelController
   settingsPanel: {fileID: 1297702631}
+  crosshair: {fileID: 1405853345}
+  scriptsToDisable:
+  - {fileID: 2083636135}
+  - {fileID: 195266824}
+  - {fileID: 454588774}
   conflictSlider: {fileID: 1120038021}
   toleranceSlider: {fileID: 525721723}
+  conflictLabel: {fileID: 362104953}
+  toleranceLabel: {fileID: 1545917328}
   conflictProbability: 0
+  toleranceLevel: 3
   toleranceMultiplier: 3
 --- !u!4 &1586435092
 Transform:
@@ -9031,19 +8967,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1636896786}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1586435091}
-        m_TargetAssemblyTypeName: SettingsPanelController, Assembly-CSharp
-        m_MethodName: TogglePanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1636896786
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,53 +4,36 @@ using System.Collections.Generic;
 
 public class MusicManager : MonoBehaviour
 {
-    [Header("Audio Source principal")]
     public AudioSource audioSource;
 
     [Header("Playlist Normal")]
     public AudioClip[] playlist;
     private int currentIndex = 0;
+    private float resumeTime = 0f;   
+    private AudioClip resumeClip;    
 
     [Header("Música Especial por Persona")]
     public List<PersonMusicData> specialMusics = new List<PersonMusicData>();
 
-    [Header("Fade")]
     public float fadeTime = 1.5f;
-
-    
-    [Range(0f, 1f)]
     public float maxVolume = 0.5f;
 
     private bool playingSpecial = false;
-    private AudioClip currentSpecialClip;
-
-    [Header("Sincronización de Luces (opcional)")]
-    public float currentAudioLevel = 0f;
 
     void Start()
     {
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
 
-        
         audioSource.volume = maxVolume;
-
         PlayNextSong();
     }
 
     void Update()
     {
-        
         if (!audioSource.isPlaying && !playingSpecial)
-        {
             PlayNextSong();
-        }
-
-        
-        currentAudioLevel = Mathf.Abs(audioSource.volume * Mathf.Sin(Time.time * 10));
     }
-
-    
 
     void PlayNextSong()
     {
@@ -59,67 +42,57 @@ public class MusicManager : MonoBehaviour
         AudioClip nextClip = playlist[currentIndex];
         currentIndex = (currentIndex + 1) % playlist.Length;
 
-        StartCoroutine(FadeTo(nextClip, false));
+        StartCoroutine(FadeTo(nextClip, false, 0f));
     }
-
-   
 
     public void PlaySpecialMusic(string personName)
     {
+        
+        resumeClip = audioSource.clip;
+        resumeTime = audioSource.time;
+
         foreach (var data in specialMusics)
         {
-            if (data.personName == personName)
+            if (data.personName == personName && data.musicClips.Length > 0)
             {
-                if (data.musicClips == null || data.musicClips.Length == 0)
-                {
-                    Debug.LogWarning("La persona " + personName + " no tiene músicas asignadas.");
-                    return;
-                }
-
-                
                 AudioClip randomClip = data.musicClips[Random.Range(0, data.musicClips.Length)];
-
-                currentSpecialClip = randomClip;
                 playingSpecial = true;
-                StartCoroutine(FadeTo(currentSpecialClip, true));
+
+                StartCoroutine(FadeTo(randomClip, true, 0f));
                 return;
             }
         }
-
-        Debug.LogWarning("No se encontró música especial para: " + personName);
     }
 
-    
     public void ResumePlaylist()
     {
         playingSpecial = false;
-        PlayNextSong();
-    }
-
-    
-
-    private IEnumerator FadeTo(AudioClip newClip, bool special)
-    {
-        float startVolume = audioSource.volume;
 
         
+        StartCoroutine(FadeTo(resumeClip, false, resumeTime));
+    }
+
+    private IEnumerator FadeTo(AudioClip newClip, bool special, float startTime)
+    {
+        float startVol = audioSource.volume;
+
         for (float t = 0; t < fadeTime; t += Time.deltaTime)
         {
-            audioSource.volume = Mathf.Lerp(startVolume, 0f, t / fadeTime);
+            audioSource.volume = Mathf.Lerp(startVol, 0, t / fadeTime);
             yield return null;
         }
 
-        audioSource.volume = 0f;
+        audioSource.volume = 0;
         audioSource.clip = newClip;
+        audioSource.time = startTime;
         audioSource.Play();
 
-        
+        // Set flag
         playingSpecial = special;
 
-        
         for (float t = 0; t < fadeTime; t += Time.deltaTime)
         {
-            audioSource.volume = Mathf.Lerp(0f, maxVolume, t / fadeTime);
+            audioSource.volume = Mathf.Lerp(0, maxVolume, t / fadeTime);
             yield return null;
         }
 
@@ -130,6 +103,6 @@ public class MusicManager : MonoBehaviour
 [System.Serializable]
 public class PersonMusicData
 {
-    public string personName;       
-    public AudioClip[] musicClips;  
+    public string personName;
+    public AudioClip[] musicClips;
 }

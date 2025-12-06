@@ -45,6 +45,9 @@ public class PlayerInteraction : MonoBehaviour
 
     private GameObject carriedContraband;
 
+    
+    private bool cursorLocked = true;
+
     void Start()
     {
         cam = Camera.main;
@@ -54,9 +57,8 @@ public class PlayerInteraction : MonoBehaviour
         if (DNIPanelRoot != null) DNIPanelRoot.SetActive(false);
         if (TicketPanelRoot != null) TicketPanelRoot.SetActive(false);
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        if (crosshair != null) crosshair.SetActive(true);
+        
+        SetCursorLocked(true);
     }
 
     void Update()
@@ -64,6 +66,21 @@ public class PlayerInteraction : MonoBehaviour
         if (Keyboard.current == null || Mouse.current == null)
             return;
 
+       
+        if (Keyboard.current.qKey.wasPressedThisFrame)
+        {
+            cursorLocked = !cursorLocked;
+            SetCursorLocked(cursorLocked);
+        }
+
+        
+        if (SettingsPanelController.Instance != null &&
+            SettingsPanelController.Instance.IsOpen)
+        {
+            return;
+        }
+
+       
         if (Keyboard.current.eKey.wasPressedThisFrame)
         {
             if (!menuAbierto)
@@ -72,12 +89,30 @@ public class PlayerInteraction : MonoBehaviour
                 CloseAllMenus();
         }
 
+        
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             if (carriedContraband == null)
                 TryPickupContraband();
             else
                 DropContraband();
+        }
+    }
+
+    
+    private void SetCursorLocked(bool locked)
+    {
+        if (locked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            if (crosshair != null) crosshair.SetActive(true);
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            if (crosshair != null) crosshair.SetActive(false);
         }
     }
 
@@ -107,9 +142,10 @@ public class PlayerInteraction : MonoBehaviour
         if (TicketPanelRoot != null) TicketPanelRoot.SetActive(false);
 
         if (cameraFPS != null) cameraFPS.freezeCamera = true;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        if (crosshair != null) crosshair.SetActive(false);
+
+       
+        SetCursorLocked(false);
+        cursorLocked = false;
 
         btnDNI.onClick.RemoveAllListeners();
         btnEntrada.onClick.RemoveAllListeners();
@@ -138,9 +174,10 @@ public class PlayerInteraction : MonoBehaviour
         if (TicketPanelRoot != null) TicketPanelRoot.SetActive(false);
 
         if (cameraFPS != null) cameraFPS.freezeCamera = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        if (crosshair != null) crosshair.SetActive(true);
+
+        
+        SetCursorLocked(true);
+        cursorLocked = true;
 
         currentNPC = null;
     }
@@ -181,13 +218,23 @@ public class PlayerInteraction : MonoBehaviour
 
     void AcceptNPC()
     {
-        currentNPC?.EnterClub();
+        if (currentNPC != null)
+        {
+            currentNPC.EnterClub();
+            currentNPC.ApplyDecisionToArrow(true);
+        }
+
         CloseAllMenus();
     }
 
     void RejectNPC()
     {
-        currentNPC?.LeaveClub();
+        if (currentNPC != null)
+        {
+            currentNPC.LeaveClub();
+            currentNPC.ApplyDecisionToArrow(false);
+        }
+
         CloseAllMenus();
     }
 
@@ -202,7 +249,6 @@ public class PlayerInteraction : MonoBehaviour
         GameObject obj = hit.collider.gameObject;
         carriedContraband = obj;
 
-        
         carriedContraband.transform.SetParent(handHoldPoint);
         carriedContraband.transform.localPosition = Vector3.zero;
         carriedContraband.transform.localRotation = Quaternion.identity;
@@ -215,7 +261,6 @@ public class PlayerInteraction : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
     }
-
 
     void DropContraband()
     {

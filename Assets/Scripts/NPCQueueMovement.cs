@@ -18,36 +18,40 @@ public class NPCQueueMovement : MonoBehaviour
 
     [HideInInspector] public int currentPointIndex = 0;
 
-    private NPCQueueManager manager;
+    [Header("Gestor de cola")]
+    public NPCQueueManager queueManager;   
+
     private Animator animator;
     private Vector3 lastPosition;
 
-    
     [HideInInspector] public bool ignoreQueueMovement = false;
     private bool goingToExternalPoint = false;
     private Vector3 externalTarget;
     private bool destroyOnArrival = false;
 
-    
     public bool IsFirstInLine
     {
         get
         {
-            if (manager == null) return false;
-            return manager.GetPointIndexFor(this) == 0;
+            if (queueManager == null) return false;
+            return queueManager.GetPointIndexFor(this) == 0;
         }
     }
 
-    void Start()
+    void Awake()
     {
-        manager = FindObjectOfType<NPCQueueManager>();
+        
+        if (queueManager == null)
+        {
+            queueManager = GetComponentInParent<NPCQueueManager>();
+        }
+
         animator = GetComponentInChildren<Animator>();
         lastPosition = transform.position;
     }
 
     void Update()
     {
-       
         if (ignoreQueueMovement)
         {
             if (goingToExternalPoint)
@@ -58,7 +62,6 @@ public class NPCQueueMovement : MonoBehaviour
             return;
         }
 
-        
         if (!IsInQueue())
         {
             MoveTowardsEntry();
@@ -66,18 +69,19 @@ public class NPCQueueMovement : MonoBehaviour
             return;
         }
 
-        
-        currentPointIndex = Mathf.Clamp(manager.GetPointIndexFor(this), 0, queuePoints.Length - 1);
+        int idx = queueManager.GetPointIndexFor(this);
+        if (idx < 0) return;
+
+        currentPointIndex = Mathf.Clamp(idx, 0, queuePoints.Length - 1);
         MoveTowardsQueuePoint();
         UpdateAnimation();
     }
 
     bool IsInQueue()
     {
-        return manager != null && manager.IsRegistered(this);
+        return queueManager != null && queueManager.IsRegistered(this);
     }
 
-    
     void MoveTowardsQueuePoint()
     {
         if (currentPointIndex < 0 || currentPointIndex >= queuePoints.Length)
@@ -99,7 +103,6 @@ public class NPCQueueMovement : MonoBehaviour
             MoveStep(dir, dist);
         }
 
-        
         if (isFront && dist <= stopDistance && lookTarget != null)
         {
             Vector3 lookDir = lookTarget.position - transform.position;
@@ -108,15 +111,18 @@ public class NPCQueueMovement : MonoBehaviour
             if (lookDir.sqrMagnitude > 0.001f)
             {
                 Quaternion lookRot = Quaternion.LookRotation(lookDir);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRot, 360f * Time.deltaTime);
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    lookRot,
+                    360f * Time.deltaTime
+                );
             }
         }
     }
 
-  
     void MoveTowardsEntry()
     {
-        if (entryPoint == null || manager == null) return;
+        if (entryPoint == null || queueManager == null) return;
 
         Vector3 target = entryPoint.position;
         Vector3 dir = target - transform.position;
@@ -125,14 +131,13 @@ public class NPCQueueMovement : MonoBehaviour
 
         if (dist <= entryStopDistance)
         {
-            manager.RegisterNPC(this);
+            queueManager.RegisterNPC(this);
             return;
         }
 
         MoveStep(dir, dist);
     }
 
-    
     public void GoToPoint(Vector3 point, bool destroyAfter)
     {
         ignoreQueueMovement = true;
@@ -140,8 +145,8 @@ public class NPCQueueMovement : MonoBehaviour
         externalTarget = point;
         destroyOnArrival = destroyAfter;
 
-        if (manager != null)
-            manager.RemoveFromQueue(this);
+        if (queueManager != null)
+            queueManager.RemoveFromQueue(this);
     }
 
     void MoveToExternalPoint()
@@ -155,7 +160,8 @@ public class NPCQueueMovement : MonoBehaviour
         if (dist <= 0.05f)
         {
             goingToExternalPoint = false;
-            animator.SetBool("IsWalking", false);
+            if (animator != null)
+                animator.SetBool("IsWalking", false);
 
             if (destroyOnArrival)
                 Destroy(gameObject);
@@ -166,7 +172,6 @@ public class NPCQueueMovement : MonoBehaviour
         MoveStep(dir, dist);
     }
 
-    
     void MoveStep(Vector3 dir, float dist)
     {
         Vector3 step = dir.normalized * speed * Time.deltaTime;
@@ -178,11 +183,14 @@ public class NPCQueueMovement : MonoBehaviour
         if (dir.sqrMagnitude > 0.0001f)
         {
             Quaternion rot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, 180f * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                rot,
+                180f * Time.deltaTime
+            );
         }
     }
 
-    
     void UpdateAnimation()
     {
         if (animator == null) return;

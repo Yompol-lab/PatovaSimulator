@@ -3,21 +3,25 @@ using UnityEngine;
 
 public class NPCQueueManager : MonoBehaviour
 {
-    private readonly List<NPCQueueMovement> npcs = new List<NPCQueueMovement>();
+    private List<NPCQueueMovement> npcs = new List<NPCQueueMovement>();
 
+   
     public void RegisterNPC(NPCQueueMovement npc)
     {
-        if (!npcs.Contains(npc))
-            npcs.Add(npc);
+        if (npc == null) return;
+        if (npcs.Contains(npc)) return;
+
+        npcs.Add(npc);
     }
 
+   
     public void RemoveFromQueue(NPCQueueMovement npc)
     {
-        if (npcs.Contains(npc))
-            npcs.Remove(npc);
+        if (npc == null) return;
+        npcs.Remove(npc);
     }
 
-    
+   
     public bool IsRegistered(NPCQueueMovement npc)
     {
         return npcs.Contains(npc);
@@ -26,10 +30,13 @@ public class NPCQueueManager : MonoBehaviour
     
     public int GetPointIndexFor(NPCQueueMovement npc)
     {
-        if (!npcs.Contains(npc))
-            return -1;
-
         return npcs.IndexOf(npc);
+    }
+
+    
+    public int Count()
+    {
+        return npcs.Count;
     }
 
     
@@ -38,19 +45,8 @@ public class NPCQueueManager : MonoBehaviour
         return npcs.Count;
     }
 
-    
-    public bool HasFreeSlot(int maxNPCInQueue)
+    public bool HasFreeSlot(int max)
     {
-        return npcs.Count < maxNPCInQueue;
-    }
-
-   
-    public NPCQueueMovement GetNPCInFrontOf(NPCQueueMovement npc)
-    {
-        int index = npcs.IndexOf(npc);
-        if (index > 0)
-            return npcs[index - 1];
-
-        return null;
+        return npcs.Count < max;
     }
 }
