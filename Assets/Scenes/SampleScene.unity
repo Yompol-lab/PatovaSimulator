@@ -571,8 +571,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCSpawnerPool
   queueManager: {fileID: 1274890534}
-  spawnInterval: 5
-  maxNPCInQueue: 3
+  spawnInterval: 10
+  maxNPCInQueue: 2
 --- !u!4 &195266825
 Transform:
   m_ObjectHideFlags: 0
@@ -2492,7 +2492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCSpawnerPool
   queueManager: {fileID: 1135785181}
   spawnInterval: 5
-  maxNPCInQueue: 3
+  maxNPCInQueue: 2
 --- !u!4 &454588775
 Transform:
   m_ObjectHideFlags: 0
@@ -5002,6 +5002,51 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &894556610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 894556612}
+  - component: {fileID: 894556611}
+  m_Layer: 0
+  m_Name: FirebaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &894556611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894556610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34984e1fab8e8cb40a64155401cf61d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirebaseManager
+  isReady: 0
+--- !u!4 &894556612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894556610}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 853.56726, y: 624.4723, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10868,6 +10913,8 @@ MonoBehaviour:
   sumaPuntos: 1
   restaPuntos: 0
   arrowController: {fileID: 0}
+  dniFalso: 0
+  entradaFalsa: 0
 --- !u!4 &543450651806971186 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1081401338327171102, guid: 9b33568b57984f148bbde447f2612647, type: 3}
@@ -12873,7 +12920,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1278010640478900873, guid: 8ff8b8256d3d7c94695b0f81600deec4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.686863
+      value: 17.36
       objectReference: {fileID: 0}
     - target: {fileID: 1278010640478900873, guid: 8ff8b8256d3d7c94695b0f81600deec4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12881,7 +12928,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1278010640478900873, guid: 8ff8b8256d3d7c94695b0f81600deec4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.088638
+      value: -0.92
       objectReference: {fileID: 0}
     - target: {fileID: 1278010640478900873, guid: 8ff8b8256d3d7c94695b0f81600deec4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15612,3 +15659,4 @@ SceneRoots:
   - {fileID: 454588775}
   - {fileID: 195266825}
   - {fileID: 1586435092}
+  - {fileID: 894556612}

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class NPCInteractionData : MonoBehaviour
@@ -33,6 +34,11 @@ public class NPCInteractionData : MonoBehaviour
     public ReputationArrow arrowController;
 
     private NPCQueueMovement movement;
+
+    [Header("Documentación Falsa")]
+    public bool dniFalso = false;
+    public bool entradaFalsa = false;
+
 
     void Start()
     {
@@ -85,7 +91,7 @@ public class NPCInteractionData : MonoBehaviour
             movement.GoToPoint(rejectExitPoint.position, true);
     }
 
-    
+
     public void ApplyDecisionToArrow(bool decisionLetPass)
     {
         if (arrowController == null)
@@ -93,25 +99,71 @@ public class NPCInteractionData : MonoBehaviour
 
         bool correctDecision = false;
 
-       
-
         if (sumaPuntos)
         {
             correctDecision = decisionLetPass;      
         }
         else if (restaPuntos)
         {
-            correctDecision = !decisionLetPass;     
+            correctDecision = !decisionLetPass;    
         }
         else
         {
-            
             return;
         }
 
         if (correctDecision)
-            arrowController.ApplyGoodDecision();  
+            arrowController.ApplyGoodDecision();
         else
-            arrowController.ApplyBadDecision();   
+            arrowController.ApplyBadDecision();
+
+       
+        LogDecisionToFirebase(decisionLetPass, correctDecision);
     }
+
+
+
+    [System.Serializable]
+    public class DecisionLog
+    {
+        public string npcName;
+        public bool dniFalso;
+        public bool entradaFalsa;
+
+        public bool jugadorDejoPasar;    
+        public bool decisionCorrecta;     
+
+        public string resultadoTexto;     
+        public long timestamp;            
+    }
+
+    public void LogDecisionToFirebase(bool decisionLetPass, bool correct)
+    {
+        DecisionLog log = new DecisionLog
+        {
+            npcName = npcName,
+            dniFalso = dniFalso,
+            entradaFalsa = entradaFalsa,
+
+            jugadorDejoPasar = decisionLetPass,
+            decisionCorrecta = correct,
+            resultadoTexto = correct ? "Correcto" : "Incorrecto",
+
+            
+            timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+        };
+
+        
+        if (FirebaseManager.Instance != null)
+        {
+            FirebaseManager.Instance.SaveDecision(log);
+        }
+
+        
+        Debug.Log("LOG -> " + JsonUtility.ToJson(log));
+    }
+
+
+
+
 }

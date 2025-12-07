@@ -20,6 +20,9 @@ public class MusicManager : MonoBehaviour
 
     private bool playingSpecial = false;
 
+    // ***** NUEVO: para no disparar varios fades a la vez *****
+    private bool waitingTransition = false;
+
     void Start()
     {
         if (audioSource == null)
@@ -31,8 +34,21 @@ public class MusicManager : MonoBehaviour
 
     void Update()
     {
-        if (!audioSource.isPlaying && !playingSpecial)
-            PlayNextSong();
+        // Si el AudioSource se quedó sin reproducir nada
+        // y no estamos en medio de una transición de fade...
+        if (!audioSource.isPlaying && !waitingTransition)
+        {
+            if (playingSpecial)
+            {
+                // Terminó un tema VIP -> volvemos a la playlist normal
+                ResumePlaylist();
+            }
+            else
+            {
+                // Terminó un tema normal -> pasamos al siguiente
+                PlayNextSong();
+            }
+        }
     }
 
     void PlayNextSong()
@@ -42,6 +58,7 @@ public class MusicManager : MonoBehaviour
         AudioClip nextClip = playlist[currentIndex];
         currentIndex = (currentIndex + 1) % playlist.Length;
 
+        waitingTransition = true; 
         StartCoroutine(FadeTo(nextClip, false, 0f));
     }
 
@@ -57,6 +74,7 @@ public class MusicManager : MonoBehaviour
             {
                 AudioClip randomClip = data.musicClips[Random.Range(0, data.musicClips.Length)];
                 playingSpecial = true;
+                waitingTransition = true;
 
                 StartCoroutine(FadeTo(randomClip, true, 0f));
                 return;
@@ -66,9 +84,10 @@ public class MusicManager : MonoBehaviour
 
     public void ResumePlaylist()
     {
-        playingSpecial = false;
-
         
+        playingSpecial = false;
+        waitingTransition = true; 
+
         StartCoroutine(FadeTo(resumeClip, false, resumeTime));
     }
 
@@ -76,6 +95,7 @@ public class MusicManager : MonoBehaviour
     {
         float startVol = audioSource.volume;
 
+        
         for (float t = 0; t < fadeTime; t += Time.deltaTime)
         {
             audioSource.volume = Mathf.Lerp(startVol, 0, t / fadeTime);
@@ -87,9 +107,10 @@ public class MusicManager : MonoBehaviour
         audioSource.time = startTime;
         audioSource.Play();
 
-        // Set flag
+        
         playingSpecial = special;
 
+        
         for (float t = 0; t < fadeTime; t += Time.deltaTime)
         {
             audioSource.volume = Mathf.Lerp(0, maxVolume, t / fadeTime);
@@ -97,6 +118,9 @@ public class MusicManager : MonoBehaviour
         }
 
         audioSource.volume = maxVolume;
+
+       
+        waitingTransition = false;
     }
 }
 

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "394683873314",
+    "firebase_url": "https://patova-simulator-default-rtdb.firebaseio.com",
+    "project_id": "patova-simulator",
+    "storage_bucket": "patova-simulator.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394683873314:android:50b3f2555b3a9a1502b27b",
+        "android_client_info": {
+          "package_name": "com.UnityTechnologies.UniversalMobile3DTemplate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNWxQa2FdR3uiE2yx6VCocUy8Dw7idelI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
