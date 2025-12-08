@@ -1420,8 +1420,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.6126462, z: 1}
-  m_Center: {x: 0, y: 1.6169746, z: 0}
+  m_Size: {x: 1, y: 0.66723466, z: 1}
+  m_Center: {x: 0, y: 1.5896803, z: 0}
 --- !u!114 &4315015406635468802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1487,6 +1487,7 @@ MonoBehaviour:
   stopDistance: 0.25
   entryStopDistance: 0.15
   currentPointIndex: 0
+  queueManager: {fileID: 0}
   ignoreQueueMovement: 0
 --- !u!114 &2069979969589954195
 MonoBehaviour:
@@ -1514,6 +1515,11 @@ MonoBehaviour:
   - {fileID: 0}
   contrabandSpawnPoint: {fileID: 4455617908714969375}
   spawnedContraband: []
+  sumaPuntos: 0
+  restaPuntos: 0
+  arrowController: {fileID: 0}
+  dniFalso: 0
+  entradaFalsa: 0
 --- !u!1 &2451657901497023909
 GameObject:
   m_ObjectHideFlags: 0
