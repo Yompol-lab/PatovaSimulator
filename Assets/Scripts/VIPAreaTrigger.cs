@@ -6,48 +6,22 @@ public class VIPAreaTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Persona"))
-            return;
+        if (!other.CompareTag("Persona")) return;
 
-        PersonTrigger person = other.GetComponent<PersonTrigger>();
-        if (person == null)
-        {
-            Debug.LogWarning("La persona que entró al VIP no tiene PersonTrigger.");
-            return;
-        }
+        var p = other.GetComponent<PersonTrigger>();
+        if (p == null || !p.playerHasVIP) return;
 
-        if (!person.playerHasVIP)
-        {
-            Debug.Log("NO tenés acceso al VIP, " + person.personName);
-            other.transform.position -= other.transform.forward * 2f;
-            return;
-        }
-
-        Debug.Log("Bienvenido al VIP " + person.personName + "! Cambiando música...");
-        if (musicManager != null)
-        {
-            musicManager.PlaySpecialMusic(person.personName);
-        }
-        else
-        {
-            Debug.LogWarning("MusicManager no asignado en VIPAreaTrigger.");
-        }
+        musicManager.NotifyVipEntered(p.personName);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.CompareTag("Persona"))
-            return;
+        if (!other.CompareTag("Persona")) return;
 
-        PersonTrigger person = other.GetComponent<PersonTrigger>();
-        if (person == null)
-            return;
+        var p = other.GetComponent<PersonTrigger>();
+        if (p == null || !p.playerHasVIP) return;
 
-        
-        if (musicManager != null)
-        {
-            Debug.Log("Saliendo del VIP " + person.personName + ". Volviendo a música normal...");
-            musicManager.ResumePlaylist();
-        }
+        musicManager.NotifyVipExited();
     }
+
 }

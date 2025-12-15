@@ -6,23 +6,22 @@ public class MusicManager : MonoBehaviour
 {
     public AudioSource audioSource;
 
-    [Header("Playlist Normal")]
     public AudioClip[] playlist;
     private int currentIndex = 0;
 
-   
-    private AudioClip basePlaylistClip;
-    private float basePlaylistTime = 0f;
+    private AudioClip resumeClip;
+    private float resumeTime;
 
-    [Header("Música Especial por Persona")]
-    public List<PersonMusicData> specialMusics = new List<PersonMusicData>();
+    public List<PersonMusicData> specialMusics;
 
-    public float fadeTime = 1.5f;
+    public float fadeTime = 1.2f;
     public float maxVolume = 0.5f;
 
-    private bool playingSpecial = false;
-    private bool waitingTransition = false;
+    private bool playingVIP = false;
     private int vipInsideCount = 0;
+
+    private Coroutine transitionRoutine;
+    private Coroutine waitEndRoutine;
 
     void Start()
     {
@@ -30,108 +29,57 @@ public class MusicManager : MonoBehaviour
             audioSource = GetComponent<AudioSource>();
 
         audioSource.volume = maxVolume;
-        PlayNextSong();
+        PlayNormal();
     }
 
-    void Update()
+    public void NotifyVipEntered(string vipName)
     {
-        
-        if (!playingSpecial && audioSource.isPlaying)
+        vipInsideCount++;
+
+        if (!playingVIP)
         {
-            basePlaylistTime = audioSource.time;
+            resumeClip = audioSource.clip;
+            resumeTime = audioSource.time;
         }
 
-        
-        if (!audioSource.isPlaying && !waitingTransition && playingSpecial)
-        {
-            ResumePlaylist();
-            return;
-        }
-
-        
-        if (!audioSource.isPlaying && !waitingTransition && !playingSpecial)
-        {
-            PlayNextSong();
-        }
+        AudioClip vipClip = GetVipClip(vipName);
+        if (vipClip != null)
+            StartTransition(vipClip, true, 0f);
     }
 
-    
-
-    void PlayNextSong()
+    public void NotifyVipExited()
     {
-        if (playlist == null || playlist.Length == 0) return;
-
-        AudioClip nextClip = playlist[currentIndex];
-        currentIndex = (currentIndex + 1) % playlist.Length;
-
-        basePlaylistClip = nextClip;
-        basePlaylistTime = 0f;
-
-        waitingTransition = true;
-        StartCoroutine(FadeTo(nextClip, false, 0f));
+        vipInsideCount = Mathf.Max(0, vipInsideCount - 1);
     }
 
-    
-
-    public void PlaySpecialMusic(string personName)
+    void StartTransition(AudioClip clip, bool vip, float startTime)
     {
-        
-        if (!playingSpecial)
-        {
-            basePlaylistClip = audioSource.clip;
-            basePlaylistTime = audioSource.time;
-        }
+        if (transitionRoutine != null)
+            StopCoroutine(transitionRoutine);
 
-        foreach (var data in specialMusics)
-        {
-            if (data.personName == personName && data.musicClips.Length > 0)
-            {
-                AudioClip randomClip =
-                    data.musicClips[Random.Range(0, data.musicClips.Length)];
+        if (waitEndRoutine != null)
+            StopCoroutine(waitEndRoutine);
 
-                playingSpecial = true;
-                waitingTransition = true;
-
-                StartCoroutine(FadeTo(randomClip, true, 0f));
-                return;
-            }
-        }
-
-        Debug.LogWarning("No se encontró música VIP para: " + personName);
+        transitionRoutine = StartCoroutine(Transition(clip, vip, startTime));
     }
 
-    public void ResumePlaylist()
-    {
-        if (basePlaylistClip == null)
-            return;
-
-        playingSpecial = false;
-        waitingTransition = true;
-
-        
-        StartCoroutine(FadeTo(basePlaylistClip, false, basePlaylistTime));
-    }
-
-    
-    private IEnumerator FadeTo(AudioClip newClip, bool special, float startTime)
+    IEnumerator Transition(AudioClip clip, bool vip, float startTime)
     {
         float startVol = audioSource.volume;
 
-       
         for (float t = 0; t < fadeTime; t += Time.deltaTime)
         {
             audioSource.volume = Mathf.Lerp(startVol, 0, t / fadeTime);
             yield return null;
         }
 
-        audioSource.volume = 0;
-        audioSource.clip = newClip;
+        audioSource.Stop();
+        audioSource.clip = clip;
         audioSource.time = startTime;
         audioSource.Play();
 
-        playingSpecial = special;
+        playingVIP = vip;
 
-       
         for (float t = 0; t < fadeTime; t += Time.deltaTime)
         {
             audioSource.volume = Mathf.Lerp(0, maxVolume, t / fadeTime);
@@ -139,23 +87,54 @@ public class MusicManager : MonoBehaviour
         }
 
         audioSource.volume = maxVolume;
-        waitingTransition = false;
+        transitionRoutine = null;
+
+        waitEndRoutine = StartCoroutine(WaitForClipEnd(vip));
     }
 
-    
-
-    public void NotifyVipEntered(string personName)
+    IEnumerator WaitForClipEnd(bool wasVIP)
     {
-        vipInsideCount++;
-        PlaySpecialMusic(personName);
+        yield return new WaitWhile(() => audioSource.isPlaying);
+
+        if (wasVIP)
+            PlayNormalFromResume();
+        else
+            PlayNextNormal();
     }
 
-    public void NotifyVipExited()
+    void PlayNormal()
     {
-        vipInsideCount = Mathf.Max(0, vipInsideCount - 1);
+        if (playlist == null || playlist.Length == 0) return;
 
-        if (vipInsideCount == 0)
-            ResumePlaylist();
+        currentIndex %= playlist.Length;
+        StartTransition(playlist[currentIndex], false, 0f);
+    }
+
+    void PlayNextNormal()
+    {
+        currentIndex = (currentIndex + 1) % playlist.Length;
+        PlayNormal();
+    }
+
+    void PlayNormalFromResume()
+    {
+        playingVIP = false;
+
+        if (resumeClip != null)
+            StartTransition(resumeClip, false, resumeTime);
+        else
+            PlayNormal();
+    }
+
+    AudioClip GetVipClip(string name)
+    {
+        foreach (var p in specialMusics)
+        {
+            if (p.personName == name && p.musicClips != null && p.musicClips.Length > 0)
+                return p.musicClips[Random.Range(0, p.musicClips.Length)];
+        }
+
+        return null;
     }
 }
 
