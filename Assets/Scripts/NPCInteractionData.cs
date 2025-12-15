@@ -39,6 +39,8 @@ public class NPCInteractionData : MonoBehaviour
     public bool dniFalso = false;
     public bool entradaFalsa = false;
 
+    [Header("Mesa de Contrabando")]
+    public ContrabandTable contrabandTable;
 
     void Start()
     {
@@ -163,6 +165,22 @@ public class NPCInteractionData : MonoBehaviour
         Debug.Log("LOG -> " + JsonUtility.ToJson(log));
     }
 
+    public void DropContrabandOnTable()
+    {
+        if (!hasDrugs || contrabandPrefabs == null || contrabandPrefabs.Length == 0)
+            return;
+
+        if (contrabandTable == null)
+        {
+            Debug.LogWarning("No hay mesa de contrabando asignada.");
+            return;
+        }
+
+        foreach (GameObject prefab in contrabandPrefabs)
+        {
+            contrabandTable.EnqueueContraband(prefab);
+        }
+    }
 
 
 

@@ -21,7 +21,6 @@ public class FirebaseManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             var dependencyStatus = task.Result;
@@ -35,7 +34,7 @@ public class FirebaseManager : MonoBehaviour
                     ApiKey = "AIzaSyCNWxQa2FdR3uiE2yx6VCocUy8Dw7idelI",
 
                     
-                    DatabaseUrl = new System.Uri("https://patova-simulator-default-rtdb.firebaseio.com/")
+                    DatabaseUrl = new System.Uri("https://patova-simulator-default-rtdb.firebaseio.com")
                 };
 
 
@@ -46,7 +45,7 @@ public class FirebaseManager : MonoBehaviour
                 reference = FirebaseDatabase.GetInstance(app).RootReference;
 
                 isReady = true;
-                Debug.Log("Firebase inicializado correctamente (PatovaApp)");
+                Debug.Log(" Firebase inicializado correctamente (PatovaApp)");
             }
             else
             {
@@ -60,7 +59,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!isReady || reference == null)
         {
-            Debug.LogWarning("Firebase no está listo todavía, no se guardó la decisión.");
+            Debug.LogWarning(" Firebase no está listo todavía, no se guardó la decisión.");
             return;
         }
 

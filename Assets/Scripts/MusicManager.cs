@@ -9,8 +9,10 @@ public class MusicManager : MonoBehaviour
     [Header("Playlist Normal")]
     public AudioClip[] playlist;
     private int currentIndex = 0;
-    private float resumeTime = 0f;   
-    private AudioClip resumeClip;    
+
+   
+    private AudioClip basePlaylistClip;
+    private float basePlaylistTime = 0f;
 
     [Header("Música Especial por Persona")]
     public List<PersonMusicData> specialMusics = new List<PersonMusicData>();
@@ -19,9 +21,8 @@ public class MusicManager : MonoBehaviour
     public float maxVolume = 0.5f;
 
     private bool playingSpecial = false;
-
-    // ***** NUEVO: para no disparar varios fades a la vez *****
     private bool waitingTransition = false;
+    private int vipInsideCount = 0;
 
     void Start()
     {
@@ -34,22 +35,27 @@ public class MusicManager : MonoBehaviour
 
     void Update()
     {
-        // Si el AudioSource se quedó sin reproducir nada
-        // y no estamos en medio de una transición de fade...
-        if (!audioSource.isPlaying && !waitingTransition)
+        
+        if (!playingSpecial && audioSource.isPlaying)
         {
-            if (playingSpecial)
-            {
-                // Terminó un tema VIP -> volvemos a la playlist normal
-                ResumePlaylist();
-            }
-            else
-            {
-                // Terminó un tema normal -> pasamos al siguiente
-                PlayNextSong();
-            }
+            basePlaylistTime = audioSource.time;
+        }
+
+        
+        if (!audioSource.isPlaying && !waitingTransition && playingSpecial)
+        {
+            ResumePlaylist();
+            return;
+        }
+
+        
+        if (!audioSource.isPlaying && !waitingTransition && !playingSpecial)
+        {
+            PlayNextSong();
         }
     }
+
+    
 
     void PlayNextSong()
     {
@@ -58,21 +64,31 @@ public class MusicManager : MonoBehaviour
         AudioClip nextClip = playlist[currentIndex];
         currentIndex = (currentIndex + 1) % playlist.Length;
 
-        waitingTransition = true; 
+        basePlaylistClip = nextClip;
+        basePlaylistTime = 0f;
+
+        waitingTransition = true;
         StartCoroutine(FadeTo(nextClip, false, 0f));
     }
+
+    
 
     public void PlaySpecialMusic(string personName)
     {
         
-        resumeClip = audioSource.clip;
-        resumeTime = audioSource.time;
+        if (!playingSpecial)
+        {
+            basePlaylistClip = audioSource.clip;
+            basePlaylistTime = audioSource.time;
+        }
 
         foreach (var data in specialMusics)
         {
             if (data.personName == personName && data.musicClips.Length > 0)
             {
-                AudioClip randomClip = data.musicClips[Random.Range(0, data.musicClips.Length)];
+                AudioClip randomClip =
+                    data.musicClips[Random.Range(0, data.musicClips.Length)];
+
                 playingSpecial = true;
                 waitingTransition = true;
 
@@ -80,22 +96,28 @@ public class MusicManager : MonoBehaviour
                 return;
             }
         }
+
+        Debug.LogWarning("No se encontró música VIP para: " + personName);
     }
 
     public void ResumePlaylist()
     {
-        
-        playingSpecial = false;
-        waitingTransition = true; 
+        if (basePlaylistClip == null)
+            return;
 
-        StartCoroutine(FadeTo(resumeClip, false, resumeTime));
+        playingSpecial = false;
+        waitingTransition = true;
+
+        
+        StartCoroutine(FadeTo(basePlaylistClip, false, basePlaylistTime));
     }
 
+    
     private IEnumerator FadeTo(AudioClip newClip, bool special, float startTime)
     {
         float startVol = audioSource.volume;
 
-        
+       
         for (float t = 0; t < fadeTime; t += Time.deltaTime)
         {
             audioSource.volume = Mathf.Lerp(startVol, 0, t / fadeTime);
@@ -107,10 +129,9 @@ public class MusicManager : MonoBehaviour
         audioSource.time = startTime;
         audioSource.Play();
 
-        
         playingSpecial = special;
 
-        
+       
         for (float t = 0; t < fadeTime; t += Time.deltaTime)
         {
             audioSource.volume = Mathf.Lerp(0, maxVolume, t / fadeTime);
@@ -118,9 +139,23 @@ public class MusicManager : MonoBehaviour
         }
 
         audioSource.volume = maxVolume;
-
-       
         waitingTransition = false;
+    }
+
+    
+
+    public void NotifyVipEntered(string personName)
+    {
+        vipInsideCount++;
+        PlaySpecialMusic(personName);
+    }
+
+    public void NotifyVipExited()
+    {
+        vipInsideCount = Mathf.Max(0, vipInsideCount - 1);
+
+        if (vipInsideCount == 0)
+            ResumePlaylist();
     }
 }
 
